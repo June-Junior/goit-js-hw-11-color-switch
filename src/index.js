@@ -1,52 +1,56 @@
-import './styles.css';
 import './index.html';
-import menuSource from './menu.json';
-import menuTemplate from './templates/menu-items.hbs';
+// import menuSource from './colors.json';
 
-// const Theme = {
-//     LIGHT: 'light-theme',
-//     DARK: 'dark-theme',
-//   };
-const menuList = document.querySelector('.js-menu');
+const btn = document.querySelectorAll("button");
 
-const markup = menuTemplate(menuSource);
-menuList.insertAdjacentHTML('beforeend', markup);
+const btnStart = btn[0];
+const btnStop = btn[1];
 
-const body = document.querySelector('body');
-const themeToggleSwitch = document.querySelector('#theme-switch-toggle');
-themeToggleSwitch.addEventListener('change', onToggleSwitchClick);
+const body = document.querySelector("body");
 
-localStorageCheck();
+btnStart.addEventListener('click', onStartClick);
+btnStop.addEventListener('click', onStopClick);
 
-function onToggleSwitchClick(evt) {
+const colors = [
+    '#FFFFFF',
+    '#2196F3',
+    '#4CAF50',
+    '#FF9800',
+    '#009688',
+    '#795548',
+  ];
 
-    console.log(evt.target); 
-    console.log(evt.target.checked);
-    
-    console.log(body.classList.contains('dark-theme'));
-    if (themeToggleSwitch.checked) {
-        
-        console.log("true");
-        
-        localStorage.setItem ('night', JSON.stringify({ДещоВзагалі_рандомне: 1, somethingToCheck_IF_IT_works: null, NoFuss: false}));
-        console.log(localStorage.getItem('night'));
-        body.classList.remove('light-theme');
-        body.classList.add('dark-theme');
-     
-    }   
-    if (!themeToggleSwitch.checked) {
-        console.log("false");    
-        localStorage.clear();
-        body.classList.remove('dark-theme');
-        body.classList.add('light-theme');
-    }    
+let randomColorPicked = null;
+let intervalId = null;
+const randomIntegerFromInterval = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
+function onStartClick() {
+  btnStart.disabled = true;
+  
+  intervalId = setInterval(colorPicker, 1000);
 }
 
-function localStorageCheck() {
-    const switchOn = localStorage.getItem('night');
-    if (switchOn) {
+function colorPicker() {
+  const randomIndexFromColorsArray = randomIntegerFromInterval(0, colors.length - 1);
+  randomColorPicked = colors[randomIndexFromColorsArray];
+  bodyColorChange();
+} 
 
-        body.classList.add('dark-theme');
-        themeToggleSwitch.checked = true;
-    } 
+function bodyColorChange() {
+  body.style.backgroundColor = randomColorPicked;
+  console.log(randomColorPicked);
 }
+
+onStartClick();
+onStopClick();
+
+// let intervalId;
+// // console.log(randomIntegerFromInterval(0, colors.length - 1));
+
+function onStopClick() {
+  clearInterval(intervalId);
+  btnStart.disabled = false;
+}
+
