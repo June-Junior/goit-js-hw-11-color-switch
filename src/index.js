@@ -43,9 +43,6 @@ function bodyColorChange() {
   console.log(randomColorPicked);
 }
 
-onStartClick();
-onStopClick();
-
 // let intervalId;
 // // console.log(randomIntegerFromInterval(0, colors.length - 1));
 
